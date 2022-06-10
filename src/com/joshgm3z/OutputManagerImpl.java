@@ -19,7 +19,7 @@ public class OutputManagerImpl implements OutputManager {
         mIsClear = isClear;
     }
 
-    public void printGrid(List<BodyPart> snake) {
+    public void printSnake(List<BodyPart> snake) {
         clearScreen();
         if (isPrintRuler) printRulerTop();
         for (int i = 0; i < GRID_SIZE; i++) {

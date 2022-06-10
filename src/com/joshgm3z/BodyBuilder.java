@@ -5,115 +5,102 @@ import java.util.List;
 
 public class BodyBuilder {
 
-    private List<BodyPart> mSnake;
-    private OutputManager mOutputManager;
+    private BodyPart mNewTail;
 
-    public BodyBuilder(OutputManager outputManager) {
-        this.mOutputManager = outputManager;
+    public BodyBuilder() {
     }
 
-    public void init() {
-        mSnake = new ArrayList<>();
-        mSnake = getInit();
-        printSnake();
+    public List<BodyPart> init() {
+        List<BodyPart> snake = new ArrayList<>();
+        snake = getInit();
+        return snake;
     }
 
-    public BodyPart goRight() {
-        BodyPart newTail = null;
-        if (!mSnake.isEmpty()) {
-            BodyPart head = mSnake.get(0);
-            BodyPart neck = mSnake.get(1);
+    public List<BodyPart> goRight(List<BodyPart> snake) {
+        if (!snake.isEmpty()) {
+            BodyPart head = snake.get(0);
+            BodyPart neck = snake.get(1);
             // horizontal
             if (head.y >= neck.y) {
                 // moving right. move one cell
                 BodyPart prev = new BodyPart(head);
                 head.y = head.y + 1;
-                newTail = moveBody(prev);
+                mNewTail = moveBody(snake, prev);
             } else {
                 // moving left. do not move
             }
         }
-        return newTail;
+        return snake;
     }
 
-    public BodyPart goDown() {
-        BodyPart newTail = null;
-        if (!mSnake.isEmpty()) {
-            BodyPart head = mSnake.get(0);
-            BodyPart neck = mSnake.get(1);
+    public List<BodyPart> goDown(List<BodyPart> snake) {
+        if (!snake.isEmpty()) {
+            BodyPart head = snake.get(0);
+            BodyPart neck = snake.get(1);
             if (head.x >= neck.x) {
                 // moving down. move one cell
                 BodyPart prev = new BodyPart(head);
                 head.x = head.x + 1;
-                newTail = moveBody(prev);
+                mNewTail = moveBody(snake, prev);
             } else {
                 // moving up. do not move
             }
         }
-        return newTail;
+        return snake;
     }
 
-    private BodyPart goLeft() {
-        BodyPart newTail = null;
-        if (!mSnake.isEmpty()) {
-            BodyPart head = mSnake.get(0);
-            BodyPart neck = mSnake.get(1);
+    private List<BodyPart> goLeft(List<BodyPart> snake) {
+        if (!snake.isEmpty()) {
+            BodyPart head = snake.get(0);
+            BodyPart neck = snake.get(1);
             // horizontal
             if (head.y <= neck.y) {
                 // moving right. move one cell
                 BodyPart prev = new BodyPart(head);
                 head.y = head.y - 1;
-                newTail = moveBody(prev);
+                mNewTail = moveBody(snake, prev);
             } else {
                 // moving left. do not move
             }
         }
-        return newTail;
+        return snake;
     }
 
-    private BodyPart goUp() {
-        BodyPart newTail = null;
-        if (!mSnake.isEmpty()) {
-            BodyPart head = mSnake.get(0);
-            BodyPart neck = mSnake.get(1);
+    private List<BodyPart> goUp(List<BodyPart> snake) {
+        if (!snake.isEmpty()) {
+            BodyPart head = snake.get(0);
+            BodyPart neck = snake.get(1);
             if (head.x <= neck.x) {
                 // moving down. move one cell
                 BodyPart prev = new BodyPart(head);
                 head.x = head.x - 1;
-                newTail = moveBody(prev);
+                mNewTail = moveBody(snake, prev);
             } else {
                 // moving up. do not move
             }
         }
-        return newTail;
+        return snake;
     }
 
-    private BodyPart moveBody(BodyPart prev) {
-        for (int i = 1; i < mSnake.size(); i++) {
-            BodyPart temp = mSnake.get(i);
-            mSnake.set(i, prev);
+    private BodyPart moveBody(List<BodyPart> snake, BodyPart prev) {
+        for (int i = 1; i < snake.size(); i++) {
+            BodyPart temp = snake.get(i);
+            snake.set(i, prev);
             prev = temp;
         }
         return prev;
     }
 
-    public void grow(int direction) {
-        BodyPart tail = null;
-        if (direction == Const.Direction.UP) tail = goUp();
-        else if (direction == Const.Direction.DOWN) tail = goDown();
-        else if (direction == Const.Direction.RIGHT) tail = goRight();
-        else if (direction == Const.Direction.LEFT) tail = goLeft();
-        if (tail != null) {
-            mSnake.add(tail);
+    public void grow(List<BodyPart> snake, int direction) {
+        if (direction == Const.Direction.UP) goUp(snake);
+        else if (direction == Const.Direction.DOWN) goDown(snake);
+        else if (direction == Const.Direction.RIGHT) goRight(snake);
+        else if (direction == Const.Direction.LEFT) goLeft(snake);
+        if (mNewTail != null) {
+            snake.add(mNewTail);
         } else {
             // invalid tail
         }
-        printSnake();
-    }
-
-    private void printSnake() {
-        mOutputManager.printGrid(mSnake);
-        System.out.println("snake : " + mSnake);
     }
 
     private List<BodyPart> getInit() {
@@ -138,12 +125,12 @@ public class BodyBuilder {
         return bodyPart;
     }
 
-    public void go(@Const.Direction int direction) {
-        if (direction == Const.Direction.UP) goUp();
-        else if (direction == Const.Direction.DOWN) goDown();
-        else if (direction == Const.Direction.RIGHT) goRight();
-        else if (direction == Const.Direction.LEFT) goLeft();
-        printSnake();
+    public List<BodyPart> go(List<BodyPart> snake, @Const.Direction int direction) {
+        if (direction == Const.Direction.UP) return goUp(snake);
+        else if (direction == Const.Direction.DOWN) return goDown(snake);
+        else if (direction == Const.Direction.RIGHT) return goRight(snake);
+        else if (direction == Const.Direction.LEFT) return goLeft(snake);
+        return null;
     }
 
 }

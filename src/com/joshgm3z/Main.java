@@ -4,10 +4,7 @@ public class Main {
 
     public static void main(String[] args) {
         // write your code here
-        BodyBuilder bodyBuilder = new BodyBuilder(new OutputManagerImpl(true));
-        bodyBuilder.init();
-
-        ActionManager actionManager = new ActionManager(bodyBuilder);
+        ActionManager actionManager = new ActionManager();
         actionManager.startAction();
     }
 
