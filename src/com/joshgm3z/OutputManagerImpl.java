@@ -7,6 +7,7 @@ public class OutputManagerImpl implements OutputManager {
 
     private final String GRID_SNAKE = " O ";
     private final String GRID_EMPTY = " - ";
+    private final String GRID_FOOD = " X ";
     private int GRID_SIZE = Const.GRID_SIZE;
     private boolean isPrintRuler;
     private boolean mIsClear = true;
@@ -19,22 +20,25 @@ public class OutputManagerImpl implements OutputManager {
         mIsClear = isClear;
     }
 
-    public void printSnake(List<BodyPart> snake) {
+    public void printSnake(List<BodyPart> snake, int foodX, int foodY) {
         clearScreen();
         if (isPrintRuler) printRulerTop();
-        for (int i = 0; i < GRID_SIZE; i++) {
-            if (isPrintRuler) printRulerSide(i);
-            for (int j = 0; j < GRID_SIZE; j++) {
+        for (int x = 0; x < GRID_SIZE; x++) {
+            if (isPrintRuler) printRulerSide(x);
+            for (int y = 0; y < GRID_SIZE; y++) {
                 boolean isBody = false;
                 for (BodyPart bodyPart : snake) {
-                    if (bodyPart.x == i && bodyPart.y == j) {
+                    if (bodyPart.x == x && bodyPart.y == y) {
                         isBody = true;
                         break;
                     } else {
                         // ignore
                     }
                 }
-                if (isBody) {
+                if (x == foodX && y == foodY) {
+                    // food
+                    printCell(GRID_FOOD);
+                } else if (isBody) {
                     // snake part found
                     printCell(GRID_SNAKE);
                 } else {
