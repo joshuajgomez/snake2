@@ -16,9 +16,9 @@ public class Main {
         bodyPart.add(new BodyPart(2, 3));
         bodyPart.add(new BodyPart(2, 4));
         bodyPart.add(new BodyPart(2, 5));
-        bodyPart.add(new BodyPart(5, 5));
-        bodyPart.add(new BodyPart(6, 5));
-        bodyPart.add(new BodyPart(6, 5));
+        bodyPart.add(new BodyPart(3, 5));
+        bodyPart.add(new BodyPart(3, 5));
+        bodyPart.add(new BodyPart(3, 5));
         return bodyPart;
     }
 }
