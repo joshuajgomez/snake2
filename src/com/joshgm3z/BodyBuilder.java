@@ -22,19 +22,14 @@ public class BodyBuilder {
         if (!mSnake.isEmpty()) {
             BodyPart head = mSnake.get(0);
             BodyPart neck = mSnake.get(1);
-            if (head.x == neck.x) {
-                // horizontal
-                if (head.y > neck.y) {
-                    // moving right. move one cell
-                    BodyPart prev = new BodyPart(head);
-                    head.y = head.y + 1;
-                    moveBody(prev);
-                } else {
-                    // moving left. do not move
-                }
+            // horizontal
+            if (head.y >= neck.y) {
+                // moving right. move one cell
+                BodyPart prev = new BodyPart(head);
+                head.y = head.y + 1;
+                moveBody(prev);
             } else {
-                // vertical
-                // TODO
+                // moving left. do not move
             }
             printSnake();
         }
@@ -44,18 +39,46 @@ public class BodyBuilder {
         if (!mSnake.isEmpty()) {
             BodyPart head = mSnake.get(0);
             BodyPart neck = mSnake.get(1);
-            if (head.x == neck.x) {
-                // horizontal
-                if (head.y > neck.y) {
-                    // moving right. move one cell
-                    BodyPart prev = new BodyPart(head);
-                    head.y = head.y + 1;
-                    moveBody(prev);
-                } else {
-                    // moving left. do not move
-                }
+            if (head.x >= neck.x) {
+                // moving down. move one cell
+                BodyPart prev = new BodyPart(head);
+                head.x = head.x + 1;
+                moveBody(prev);
             } else {
-                // vertical
+                // moving up. do not move
+            }
+            printSnake();
+        }
+    }
+
+    private void goLeft() {
+        if (!mSnake.isEmpty()) {
+            BodyPart head = mSnake.get(0);
+            BodyPart neck = mSnake.get(1);
+            // horizontal
+            if (head.y <= neck.y) {
+                // moving right. move one cell
+                BodyPart prev = new BodyPart(head);
+                head.y = head.y - 1;
+                moveBody(prev);
+            } else {
+                // moving left. do not move
+            }
+            printSnake();
+        }
+    }
+
+    private void goUp() {
+        if (!mSnake.isEmpty()) {
+            BodyPart head = mSnake.get(0);
+            BodyPart neck = mSnake.get(1);
+            if (head.x <= neck.x) {
+                // moving down. move one cell
+                BodyPart prev = new BodyPart(head);
+                head.x = head.x - 1;
+                moveBody(prev);
+            } else {
+                // moving up. do not move
             }
             printSnake();
         }
@@ -95,4 +118,12 @@ public class BodyBuilder {
         bodyPart.add(new BodyPart(4, 7));
         return bodyPart;
     }
+
+    public void go(@Const.Direction int direction) {
+        if (direction == Const.Direction.UP) goUp();
+        else if (direction == Const.Direction.DOWN) goDown();
+        else if (direction == Const.Direction.RIGHT) goRight();
+        else if (direction == Const.Direction.LEFT) goLeft();
+    }
+
 }
