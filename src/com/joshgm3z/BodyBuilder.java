@@ -18,7 +18,8 @@ public class BodyBuilder {
         printSnake();
     }
 
-    public void goRight() {
+    public BodyPart goRight() {
+        BodyPart newTail = null;
         if (!mSnake.isEmpty()) {
             BodyPart head = mSnake.get(0);
             BodyPart neck = mSnake.get(1);
@@ -27,15 +28,16 @@ public class BodyBuilder {
                 // moving right. move one cell
                 BodyPart prev = new BodyPart(head);
                 head.y = head.y + 1;
-                moveBody(prev);
+                newTail = moveBody(prev);
             } else {
                 // moving left. do not move
             }
-            printSnake();
         }
+        return newTail;
     }
 
-    public void goDown() {
+    public BodyPart goDown() {
+        BodyPart newTail = null;
         if (!mSnake.isEmpty()) {
             BodyPart head = mSnake.get(0);
             BodyPart neck = mSnake.get(1);
@@ -43,15 +45,16 @@ public class BodyBuilder {
                 // moving down. move one cell
                 BodyPart prev = new BodyPart(head);
                 head.x = head.x + 1;
-                moveBody(prev);
+                newTail = moveBody(prev);
             } else {
                 // moving up. do not move
             }
-            printSnake();
         }
+        return newTail;
     }
 
-    private void goLeft() {
+    private BodyPart goLeft() {
+        BodyPart newTail = null;
         if (!mSnake.isEmpty()) {
             BodyPart head = mSnake.get(0);
             BodyPart neck = mSnake.get(1);
@@ -60,15 +63,16 @@ public class BodyBuilder {
                 // moving right. move one cell
                 BodyPart prev = new BodyPart(head);
                 head.y = head.y - 1;
-                moveBody(prev);
+                newTail = moveBody(prev);
             } else {
                 // moving left. do not move
             }
-            printSnake();
         }
+        return newTail;
     }
 
-    private void goUp() {
+    private BodyPart goUp() {
+        BodyPart newTail = null;
         if (!mSnake.isEmpty()) {
             BodyPart head = mSnake.get(0);
             BodyPart neck = mSnake.get(1);
@@ -76,20 +80,35 @@ public class BodyBuilder {
                 // moving down. move one cell
                 BodyPart prev = new BodyPart(head);
                 head.x = head.x - 1;
-                moveBody(prev);
+                newTail = moveBody(prev);
             } else {
                 // moving up. do not move
             }
-            printSnake();
         }
+        return newTail;
     }
 
-    private void moveBody(BodyPart prev) {
+    private BodyPart moveBody(BodyPart prev) {
         for (int i = 1; i < mSnake.size(); i++) {
             BodyPart temp = mSnake.get(i);
             mSnake.set(i, prev);
             prev = temp;
         }
+        return prev;
+    }
+
+    public void grow(int direction) {
+        BodyPart tail = null;
+        if (direction == Const.Direction.UP) tail = goUp();
+        else if (direction == Const.Direction.DOWN) tail = goDown();
+        else if (direction == Const.Direction.RIGHT) tail = goRight();
+        else if (direction == Const.Direction.LEFT) tail = goLeft();
+        if (tail != null) {
+            mSnake.add(tail);
+        } else {
+            // invalid tail
+        }
+        printSnake();
     }
 
     private void printSnake() {
@@ -124,6 +143,7 @@ public class BodyBuilder {
         else if (direction == Const.Direction.DOWN) goDown();
         else if (direction == Const.Direction.RIGHT) goRight();
         else if (direction == Const.Direction.LEFT) goLeft();
+        printSnake();
     }
 
 }
