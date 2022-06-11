@@ -6,14 +6,14 @@ import java.util.List;
 public class OutputManagerImpl implements OutputManager {
 
     private final String GRID_SNAKE = " O ";
-    private final String GRID_EMPTY = " - ";
+    private final String GRID_SNAKE_HEAD = " # ";
+    private final String GRID_EMPTY = "   ";
     private final String GRID_FOOD = " X ";
     private int GRID_SIZE = Const.GRID_SIZE;
-    private boolean isPrintRuler;
+    private boolean isPrintRuler = false;
     private boolean mIsClear = true;
 
-    public OutputManagerImpl(boolean isPrintRuler) {
-        this.isPrintRuler = isPrintRuler;
+    public OutputManagerImpl() {
     }
 
     public void setIsClear(boolean isClear) {
@@ -27,6 +27,7 @@ public class OutputManagerImpl implements OutputManager {
             if (isPrintRuler) printRulerSide(x);
             for (int y = 0; y < GRID_SIZE; y++) {
                 boolean isBody = false;
+                int counter = 0;
                 for (BodyPart bodyPart : snake) {
                     if (bodyPart.x == x && bodyPart.y == y) {
                         isBody = true;
@@ -34,13 +35,18 @@ public class OutputManagerImpl implements OutputManager {
                     } else {
                         // ignore
                     }
+                    counter++;
                 }
                 if (x == foodX && y == foodY) {
                     // food
                     printCell(GRID_FOOD);
                 } else if (isBody) {
                     // snake part found
-                    printCell(GRID_SNAKE);
+                    if (counter == 0) {
+                        printCell(GRID_SNAKE_HEAD);
+                    } else {
+                        printCell(GRID_SNAKE);
+                    }
                 } else {
                     // empty grid
                     printCell(GRID_EMPTY);

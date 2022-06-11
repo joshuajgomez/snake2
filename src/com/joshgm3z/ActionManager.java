@@ -31,7 +31,7 @@ public class ActionManager {
     }
 
     public ActionManager() {
-        mOutputManager = new OutputManagerImpl(true);
+        mOutputManager = new OutputManagerImpl();
         mBodyBuilder = new BodyBuilder();
         mSnake = mBodyBuilder.init();
         printSnake();
@@ -110,7 +110,11 @@ public class ActionManager {
             if (head.y == 0) {
                 action = Action.GO_UP;
             } else {
-                action = Action.GO_RIGHT;
+                if (neck().x == head.x) {
+                    action = Action.GO_UP;
+                } else {
+                    action = Action.GO_RIGHT;
+                }
             }
         } else if (head.y > foodY) {
             // food is at top left. move left
@@ -153,14 +157,29 @@ public class ActionManager {
             action = Action.EAT_DOWN;
         } else if (head.x < foodX) {
             // food is straight below. go down
-            action = Action.GO_DOWN;
+            if (neck().y == head.y) {
+                if (head.y == 0) {
+                    action = Action.GO_RIGHT;
+                } else {
+                    action = Action.GO_LEFT;
+                }
+            } else {
+                action = Action.GO_DOWN;
+            }
         } else if (head.x > foodX) {
-            // food is behind
             if (head.x == 0) {
                 // head is at top
                 action = Action.GO_DOWN;
             } else {
-                action = Action.GO_UP;
+                if (neck().y == head.y) {
+                    if (head.y == 0) {
+                        action = Action.GO_RIGHT;
+                    } else {
+                        action = Action.GO_LEFT;
+                    }
+                } else {
+                    action = Action.GO_UP;
+                }
             }
         }
         return action;
@@ -192,13 +211,13 @@ public class ActionManager {
     }
 
     private void printLog(BodyPart head) {
-        System.out.println("head: " + head + ", foodX: " + foodX + ", foodY: " + foodY);
+        System.out.println("Snake length: " + mSnake.size() + "\thead: " + head + "\tfoodX: " + foodX + "\tfoodY: " + foodY);
     }
 
     private void action(int direction, int times) {
         for (int i = 0; i < times; i++) {
             try {
-                Thread.sleep(1000);
+                Thread.sleep(Const.ANIMATION_DELAY);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
