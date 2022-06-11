@@ -45,8 +45,8 @@ public class ActionManager {
     }
 
     public void initFood() {
-        foodX = 5;
-        foodY = 5;
+        foodX = 9;
+        foodY = 9;
     }
 
     public void startAction() {
@@ -58,100 +58,141 @@ public class ActionManager {
         }
     }
 
-    public void mockAction() {
-//        action(Action.RIGHT, 3);
-//        action(Action.DOWN, 2);
-//        grow(Action.DOWN);
-//        action(Action.DOWN, 2);
-//        action(Action.LEFT, 3);
-//        grow(Action.LEFT);
-
-
-    }
-
     private int getNextAction() {
         BodyPart head = mSnake.get(0);
         printLog(head);
         int action = -1;
         if (head.x == foodX) {
-            // same horizontal line
-            if (head.y - 1 == foodY) {
-                // eat left
-                action = Action.EAT_LEFT;
-            } else if (head.y + 1 == foodY) {
-                // eat right
-                action = Action.EAT_RIGHT;
-            } else if (head.y < foodY) {
-                // food is ahead. keep moving right
-                action = Action.GO_RIGHT;
-            } else if (head.y > foodY) {
-                // food is behind
-                if (head.x == Const.GRID_SIZE - 1) {
-                    // head is at top. go down
-                    System.out.println("down here1");
-                    action = Action.GO_DOWN;
-                } else {
-                    action = Action.GO_UP;
-                }
-            }
+            action = sameHorizontalLine(head);
         } else if (head.y == foodY) {
-            // same vertical line
-            if (head.x - 1 == foodX) {
-                // eat up
-                action = Action.EAT_UP;
-            } else if (head.x + 1 == foodX) {
-                // eat down
-                System.out.println("down here2");
-                action = Action.EAT_DOWN;
-            } else if (head.x < foodX) {
-                // food is straight below. go down
-                System.out.println("down here3");
-                action = Action.GO_DOWN;
-            } else if (head.x > foodX) {
-                // food is behind
-                if (head.x == Const.GRID_SIZE - 1) {
-                    // head is at top. go down
-                    System.out.println("down here4");
-                    action = Action.GO_DOWN;
-                } else {
-                    action = Action.GO_UP;
-                }
-            }
+            action = sameVerticalLine(head);
         } else if (head.x > foodX) {
-            // head is below food
-            if (head.y < foodY) {
-                // food is at top right. keep moving right
+            action = headBelowFood(head);
+        } else {
+            action = headAboveFood(head);
+        }
+        return action;
+    }
+
+    // head.x < foodX
+    private int headAboveFood(BodyPart head) {
+        int action = -1;
+        // head is above food
+        if (head.y < foodY) {
+            // head is top left of food. go right
+            if (neck().x == head.x) {
+                action = Action.GO_DOWN;
+            } else {
                 action = Action.GO_RIGHT;
-            } else if (head.y > foodY) {
-                // food is at top left. move left
+            }
+        } else if (head.y > foodY) {
+            // head is ahead of food. go left
+            BodyPart neck = neck();
+            if (neck.x == head.x) {
+                action = Action.GO_DOWN;
+            } else {
+                action = Action.GO_LEFT;
+            }
+        }
+        return action;
+    }
+
+    private BodyPart neck() {
+        return mSnake.get(1);
+    }
+
+    // head.x > foodX
+    private int headBelowFood(BodyPart head) {
+        int action = -1;
+        // head is below food
+        if (head.y < foodY) {
+            // food is at top right. keep moving right
+            if (head.y == 0) {
+                action = Action.GO_UP;
+            } else {
+                action = Action.GO_RIGHT;
+            }
+        } else if (head.y > foodY) {
+            // food is at top left. move left
+            if (head.x == Const.GRID_SIZE - 1) {
                 if (head.y == Const.GRID_SIZE - 1) {
-                    // head is at top. go down
-                    action = Action.GO_RIGHT;
+                    // head is at below right corner.
+                    BodyPart neck = neck();
+                    if (neck.x == head.x) {
+                        action = Action.GO_UP;
+                    } else {
+                        action = Action.GO_LEFT;
+                    }
+                } else {
+                    action = Action.GO_LEFT;
+                }
+            } else {
+                BodyPart neck = neck();
+                if (neck.x == head.x) {
+                    action = Action.GO_UP;
                 } else {
                     action = Action.GO_LEFT;
                 }
             }
+        } else {
+            // same vertical line
+            action = Action.GO_UP;
+        }
+        return action;
+    }
+
+    // head.y == foodY
+    private int sameVerticalLine(BodyPart head) {
+        int action = -1;
+        // same vertical line
+        if (head.x - 1 == foodX) {
+            // eat up
+            action = Action.EAT_UP;
+        } else if (head.x + 1 == foodX) {
+            // eat down
+            action = Action.EAT_DOWN;
         } else if (head.x < foodX) {
-            // head is above food
-            if (head.y < foodY) {
-                // head is top left of food. go right
-                action = Action.GO_RIGHT;
-            } else if (head.y > foodY) {
-                // head is ahead of food. go left
+            // food is straight below. go down
+            action = Action.GO_DOWN;
+        } else if (head.x > foodX) {
+            // food is behind
+            if (head.x == 0) {
+                // head is at top
+                action = Action.GO_DOWN;
+            } else {
+                action = Action.GO_UP;
+            }
+        }
+        return action;
+    }
+
+    // head.x == foodX
+    private int sameHorizontalLine(BodyPart head) {
+        int action = -1;
+        // same horizontal line
+        if (head.y - 1 == foodY) {
+            // eat left
+            action = Action.EAT_LEFT;
+        } else if (head.y + 1 == foodY) {
+            // eat right
+            action = Action.EAT_RIGHT;
+        } else if (head.y < foodY) {
+            // food is ahead. keep moving right
+            action = Action.GO_RIGHT;
+        } else if (head.y > foodY) {
+            // food is behind
+            if (head.x == Const.GRID_SIZE - 1) {
+                // head is at top. go down
+                action = Action.GO_DOWN;
+            } else {
                 action = Action.GO_LEFT;
             }
         }
-        System.out.println("action" + action);
         return action;
     }
 
     private void printLog(BodyPart head) {
         System.out.println("head: " + head + ", foodX: " + foodX + ", foodY: " + foodY);
-    }
-
-    private void grow(int direction) {
-        mBodyBuilder.grow(mSnake, direction);
-        printSnake();
     }
 
     private void action(int direction, int times) {
