@@ -40,100 +40,113 @@ public class ActionManager {
 
     public void updateFood() {
         Random rand = new Random();
-//        foodX = rand.nextInt(Const.GRID_SIZE);
-//        foodY = rand.nextInt(Const.GRID_SIZE);
+        foodX = rand.nextInt(Const.GRID_SIZE);
+        foodY = rand.nextInt(Const.GRID_SIZE);
+    }
+
+    public void initFood() {
         foodX = 5;
         foodY = 5;
     }
 
     public void startAction() {
         updateFood();
-        int count = 10;
-        while (count-- > 0) {
+        int count = 20;
+        while (true) {
             int direction = getNextAction();
             action(direction, 1);
         }
     }
 
     public void mockAction() {
-        action(Const.Direction.RIGHT, 3);
-        action(Const.Direction.DOWN, 2);
-        grow(Const.Direction.DOWN);
-        action(Const.Direction.DOWN, 2);
-        action(Const.Direction.LEFT, 3);
-        grow(Const.Direction.LEFT);
+//        action(Action.RIGHT, 3);
+//        action(Action.DOWN, 2);
+//        grow(Action.DOWN);
+//        action(Action.DOWN, 2);
+//        action(Action.LEFT, 3);
+//        grow(Action.LEFT);
 
 
     }
 
     private int getNextAction() {
         BodyPart head = mSnake.get(0);
-        int direction = -1;
+        printLog(head);
+        int action = -1;
         if (head.x == foodX) {
             // same horizontal line
             if (head.y - 1 == foodY) {
                 // eat left
-                direction = Action.EAT_LEFT;
+                action = Action.EAT_LEFT;
             } else if (head.y + 1 == foodY) {
                 // eat right
-                direction = Action.EAT_RIGHT;
+                action = Action.EAT_RIGHT;
             } else if (head.y < foodY) {
                 // food is ahead. keep moving right
-                direction = Const.Direction.RIGHT;
+                action = Action.GO_RIGHT;
             } else if (head.y > foodY) {
                 // food is behind
                 if (head.x == Const.GRID_SIZE - 1) {
                     // head is at top. go down
-                    direction = Const.Direction.DOWN;
+                    System.out.println("down here1");
+                    action = Action.GO_DOWN;
                 } else {
-                    direction = Const.Direction.UP;
+                    action = Action.GO_UP;
                 }
             }
         } else if (head.y == foodY) {
             // same vertical line
             if (head.x - 1 == foodX) {
                 // eat up
-                direction = Action.EAT_UP;
+                action = Action.EAT_UP;
             } else if (head.x + 1 == foodX) {
                 // eat down
-                direction = Action.EAT_DOWN;
+                System.out.println("down here2");
+                action = Action.EAT_DOWN;
             } else if (head.x < foodX) {
                 // food is straight below. go down
-                direction = Const.Direction.DOWN;
+                System.out.println("down here3");
+                action = Action.GO_DOWN;
             } else if (head.x > foodX) {
                 // food is behind
                 if (head.x == Const.GRID_SIZE - 1) {
                     // head is at top. go down
-                    direction = Const.Direction.DOWN;
+                    System.out.println("down here4");
+                    action = Action.GO_DOWN;
                 } else {
-                    direction = Const.Direction.UP;
+                    action = Action.GO_UP;
                 }
             }
         } else if (head.x > foodX) {
             // head is below food
             if (head.y < foodY) {
                 // food is at top right. keep moving right
-                direction = Const.Direction.RIGHT;
+                action = Action.GO_RIGHT;
             } else if (head.y > foodY) {
                 // food is at top left. move left
                 if (head.y == Const.GRID_SIZE - 1) {
                     // head is at top. go down
-                    direction = Const.Direction.RIGHT;
+                    action = Action.GO_RIGHT;
                 } else {
-                    direction = Const.Direction.LEFT;
+                    action = Action.GO_LEFT;
                 }
             }
         } else if (head.x < foodX) {
             // head is above food
             if (head.y < foodY) {
-                // head is behind food. go right
-                direction = Const.Direction.RIGHT;
+                // head is top left of food. go right
+                action = Action.GO_RIGHT;
             } else if (head.y > foodY) {
                 // head is ahead of food. go left
-                direction = Const.Direction.LEFT;
+                action = Action.GO_LEFT;
             }
         }
-        return direction;
+        System.out.println("action" + action);
+        return action;
+    }
+
+    private void printLog(BodyPart head) {
+        System.out.println("head: " + head + ", foodX: " + foodX + ", foodY: " + foodY);
     }
 
     private void grow(int direction) {
@@ -148,7 +161,36 @@ public class ActionManager {
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
-            mBodyBuilder.go(mSnake, direction);
+            switch (direction) {
+                case Action.EAT_RIGHT:
+                    mBodyBuilder.grow(mSnake, Const.Direction.RIGHT);
+                    updateFood();
+                    break;
+                case Action.EAT_LEFT:
+                    mBodyBuilder.grow(mSnake, Const.Direction.LEFT);
+                    updateFood();
+                    break;
+                case Action.EAT_DOWN:
+                    mBodyBuilder.grow(mSnake, Const.Direction.DOWN);
+                    updateFood();
+                    break;
+                case Action.EAT_UP:
+                    mBodyBuilder.grow(mSnake, Const.Direction.UP);
+                    updateFood();
+                    break;
+                case Action.GO_DOWN:
+                    mBodyBuilder.go(mSnake, Const.Direction.DOWN);
+                    break;
+                case Action.GO_UP:
+                    mBodyBuilder.go(mSnake, Const.Direction.UP);
+                    break;
+                case Action.GO_LEFT:
+                    mBodyBuilder.go(mSnake, Const.Direction.LEFT);
+                    break;
+                case Action.GO_RIGHT:
+                    mBodyBuilder.go(mSnake, Const.Direction.RIGHT);
+                    break;
+            }
             printSnake();
         }
     }
