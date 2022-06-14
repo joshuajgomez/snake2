@@ -8,10 +8,10 @@ public class OutputManagerImpl implements OutputManager {
     private final String SPACE = " ";
     private final String GRID_SNAKE = SPACE + "O" + SPACE;
     private final String GRID_SNAKE_HEAD = SPACE + "#" + SPACE;
-    private final String GRID_EMPTY = SPACE + "-" + SPACE;
+    private final String GRID_EMPTY = SPACE + " " + SPACE;
     private final String GRID_FOOD = SPACE + "X" + SPACE;
     private int GRID_SIZE = Const.GRID_SIZE;
-    private boolean isPrintRuler = true;
+    private boolean isPrintRuler = false;
     private boolean mIsClear = true;
 
     public OutputManagerImpl() {

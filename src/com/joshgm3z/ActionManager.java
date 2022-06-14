@@ -10,25 +10,17 @@ public class ActionManager {
     private int foodY = -1;
     private OutputManager mOutputManager;
     private List<BodyPart> mSnake;
-    private final long ANIMATION_DELAY = 1000;
+    private final long ANIMATION_DELAY = 500;
 
-    @interface Action {
+    public @interface Action {
         int GO_LEFT = 0;
         int GO_RIGHT = 1;
         int GO_DOWN = 2;
         int GO_UP = 3;
-        int GO_UP_RIGHT = 4;
-        int GO_UP_LEFT = 5;
-        int GO_DOWN_RIGHT = 6;
-        int GO_DOWN_LEFT = 7;
-        int GO_RIGHT_UP = 8;
-        int GO_RIGHT_DOWN = 9;
-        int GO_LEFT_UP = 10;
-        int GO_LEFT_DOWN = 11;
-        int EAT_LEFT = 12;
-        int EAT_RIGHT = 13;
-        int EAT_DOWN = 14;
-        int EAT_UP = 15;
+        int EAT_LEFT = 4;
+        int EAT_RIGHT = 5;
+        int EAT_DOWN = 6;
+        int EAT_UP = 7;
     }
 
     public ActionManager() {
@@ -55,7 +47,7 @@ public class ActionManager {
         int count = 20;
         while (count-- > 0) {
             int direction = getNextAction();
-            action(direction, 1);
+            action(direction);
         }
     }
 
@@ -154,8 +146,8 @@ public class ActionManager {
 
     // head.y == foodY
     private int sameVerticalLine() {
-        BodyPart head = head();
         int action = -1;
+        BodyPart head = head();
         // same vertical line
         if (head.x - 1 == foodX) {
             // eat up
@@ -220,48 +212,31 @@ public class ActionManager {
     }
 
     private void printLog(BodyPart head) {
-        System.out.println("Snake length: " + mSnake.size() + "\thead: " + head + "\tfoodX: " + foodX + "\tfoodY: " + foodY);
+        System.out.println("Snake length: " + mSnake.size() + "\t\thead: " + head + "\t\tfoodX: " + foodX + "\tfoodY: " + foodY);
     }
 
-    private void action(int direction, int times) {
-        for (int i = 0; i < times; i++) {
-            try {
-                Thread.sleep(ANIMATION_DELAY);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-            switch (direction) {
-                case Action.EAT_RIGHT:
-                    mBodyBuilder.grow(mSnake, Const.Direction.RIGHT);
-                    updateFood();
-                    break;
-                case Action.EAT_LEFT:
-                    mBodyBuilder.grow(mSnake, Const.Direction.LEFT);
-                    updateFood();
-                    break;
-                case Action.EAT_DOWN:
-                    mBodyBuilder.grow(mSnake, Const.Direction.DOWN);
-                    updateFood();
-                    break;
-                case Action.EAT_UP:
-                    mBodyBuilder.grow(mSnake, Const.Direction.UP);
-                    updateFood();
-                    break;
-                case Action.GO_DOWN:
-                    mBodyBuilder.go(mSnake, Const.Direction.DOWN);
-                    break;
-                case Action.GO_UP:
-                    mBodyBuilder.go(mSnake, Const.Direction.UP);
-                    break;
-                case Action.GO_LEFT:
-                    mBodyBuilder.go(mSnake, Const.Direction.LEFT);
-                    break;
-                case Action.GO_RIGHT:
-                    mBodyBuilder.go(mSnake, Const.Direction.RIGHT);
-                    break;
-            }
-            printSnake();
+    private void action(int direction) {
+        try {
+            Thread.sleep(ANIMATION_DELAY);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
         }
+        switch (direction) {
+            case Action.EAT_RIGHT:
+            case Action.EAT_LEFT:
+            case Action.EAT_UP:
+            case Action.EAT_DOWN:
+                mBodyBuilder.grow(mSnake, direction);
+                updateFood();
+                break;
+            case Action.GO_DOWN:
+            case Action.GO_UP:
+            case Action.GO_LEFT:
+            case Action.GO_RIGHT:
+                mBodyBuilder.go(mSnake, direction);
+                break;
+        }
+        printSnake();
     }
 
     private void printSnake() {

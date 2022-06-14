@@ -92,10 +92,10 @@ public class BodyBuilder {
     }
 
     public void grow(List<BodyPart> snake, int direction) {
-        if (direction == Const.Direction.UP) goUp(snake);
-        else if (direction == Const.Direction.DOWN) goDown(snake);
-        else if (direction == Const.Direction.RIGHT) goRight(snake);
-        else if (direction == Const.Direction.LEFT) goLeft(snake);
+        if (direction == ActionManager.Action.EAT_UP) goUp(snake);
+        else if (direction == ActionManager.Action.EAT_DOWN) goDown(snake);
+        else if (direction == ActionManager.Action.EAT_RIGHT) goRight(snake);
+        else if (direction == ActionManager.Action.EAT_LEFT) goLeft(snake);
         if (mNewTail != null) {
             snake.add(mNewTail);
         } else {
@@ -126,10 +126,10 @@ public class BodyBuilder {
     }
 
     public List<BodyPart> go(List<BodyPart> snake, @Const.Direction int direction) {
-        if (direction == Const.Direction.UP) return goUp(snake);
-        else if (direction == Const.Direction.DOWN) return goDown(snake);
-        else if (direction == Const.Direction.RIGHT) return goRight(snake);
-        else if (direction == Const.Direction.LEFT) return goLeft(snake);
+        if (direction == ActionManager.Action.GO_UP) return goUp(snake);
+        else if (direction == ActionManager.Action.GO_DOWN) return goDown(snake);
+        else if (direction == ActionManager.Action.GO_RIGHT) return goRight(snake);
+        else if (direction == ActionManager.Action.GO_LEFT) return goLeft(snake);
         return null;
     }
 
