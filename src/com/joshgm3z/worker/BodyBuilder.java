@@ -1,4 +1,7 @@
-package com.joshgm3z;
+package com.joshgm3z.worker;
+
+import com.joshgm3z.BodyPart;
+import com.joshgm3z.Const;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -11,9 +14,7 @@ public class BodyBuilder {
     }
 
     public List<BodyPart> init() {
-        List<BodyPart> snake = new ArrayList<>();
-        snake = getInit();
-        return snake;
+        return getInit();
     }
 
     public List<BodyPart> goRight(List<BodyPart> snake) {

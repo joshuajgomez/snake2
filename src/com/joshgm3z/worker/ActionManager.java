@@ -1,4 +1,6 @@
-package com.joshgm3z;
+package com.joshgm3z.worker;
+
+import com.joshgm3z.*;
 
 import java.util.List;
 import java.util.Random;
@@ -8,11 +10,11 @@ public class ActionManager {
     private BodyBuilder mBodyBuilder;
     private int foodX = -1;
     private int foodY = -1;
-    private OutputManager mOutputManager;
     private List<BodyPart> mSnake;
     private final long ANIMATION_DELAY = 500;
     private boolean isInfinite = true;
     private final int LOOP_COUNT = 10;
+    private SnakeBuilder.BuilderCallback mCallback;
 
     public @interface Action {
         int GO_LEFT = 0;
@@ -25,8 +27,8 @@ public class ActionManager {
         int EAT_UP = 7;
     }
 
-    public ActionManager() {
-        mOutputManager = new OutputManagerImpl();
+    public ActionManager(SnakeBuilder.BuilderCallback builderCallback) {
+        mCallback = builderCallback;
         mBodyBuilder = new BodyBuilder();
         mSnake = mBodyBuilder.init();
         printSnake();
@@ -242,6 +244,6 @@ public class ActionManager {
     }
 
     private void printSnake() {
-        mOutputManager.printSnake(mSnake, foodX, foodY);
+        mCallback.onMovement(mSnake, foodX, foodY);
     }
 }
