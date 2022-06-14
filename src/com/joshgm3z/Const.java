@@ -2,7 +2,7 @@ package com.joshgm3z;
 
 public class Const {
 
-    public static final int GRID_SIZE = 20;
+    public static final int GRID_SIZE = 10;
     public static final long ANIMATION_DELAY = 500;
 
     public @interface Direction {

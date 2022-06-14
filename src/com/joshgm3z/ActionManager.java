@@ -45,14 +45,14 @@ public class ActionManager {
     }
 
     public void initFood() {
-        foodX = 9;
-        foodY = 9;
+        foodX = 7;
+        foodY = 4;
     }
 
     public void startAction() {
-        updateFood();
+        initFood();
         int count = 20;
-        while (true) {
+        while (count-- > 0) {
             int direction = getNextAction();
             action(direction, 1);
         }

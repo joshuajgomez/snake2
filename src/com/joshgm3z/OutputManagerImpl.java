@@ -5,12 +5,13 @@ import java.util.List;
 
 public class OutputManagerImpl implements OutputManager {
 
-    private final String GRID_SNAKE = " O ";
-    private final String GRID_SNAKE_HEAD = " # ";
-    private final String GRID_EMPTY = "   ";
-    private final String GRID_FOOD = " X ";
+    private final String SPACE = " ";
+    private final String GRID_SNAKE = SPACE + "O" + SPACE;
+    private final String GRID_SNAKE_HEAD = SPACE + "#" + SPACE;
+    private final String GRID_EMPTY = SPACE + "-" + SPACE;
+    private final String GRID_FOOD = SPACE + "X" + SPACE;
     private int GRID_SIZE = Const.GRID_SIZE;
-    private boolean isPrintRuler = false;
+    private boolean isPrintRuler = true;
     private boolean mIsClear = true;
 
     public OutputManagerImpl() {
@@ -71,13 +72,13 @@ public class OutputManagerImpl implements OutputManager {
     }
 
     private void printRulerSide(int i) {
-        System.out.print(" " + i + " ");
+        System.out.print(SPACE + i + SPACE);
     }
 
     private void printRulerTop() {
-        System.out.print("   ");
+        System.out.print(SPACE + SPACE + SPACE);
         for (int i = 0; i < GRID_SIZE; i++) {
-            System.out.print(" " + i + " ");
+            System.out.print(SPACE + i + SPACE);
         }
         System.out.println();
     }
