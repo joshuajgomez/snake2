@@ -10,6 +10,7 @@ public class ActionManager {
     private int foodY = -1;
     private OutputManager mOutputManager;
     private List<BodyPart> mSnake;
+    private final long ANIMATION_DELAY = 1000;
 
     @interface Action {
         int GO_LEFT = 0;
@@ -164,7 +165,7 @@ public class ActionManager {
             action = Action.EAT_DOWN;
         } else if (head.x < foodX) {
             // food is straight below. go down
-            if (neck().y == head.y) {
+            if (neck().y == head.y && neck().x > head.x) {
                 if (head.y == 0) {
                     action = Action.GO_RIGHT;
                 } else {
@@ -178,7 +179,7 @@ public class ActionManager {
                 // head is at top
                 action = Action.GO_DOWN;
             } else {
-                if (neck().y == head.y) {
+                if (neck().y == head.y && neck().x < head.x) {
                     if (head.y == 0) {
                         action = Action.GO_RIGHT;
                     } else {
@@ -225,7 +226,7 @@ public class ActionManager {
     private void action(int direction, int times) {
         for (int i = 0; i < times; i++) {
             try {
-                Thread.sleep(Const.ANIMATION_DELAY);
+                Thread.sleep(ANIMATION_DELAY);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
