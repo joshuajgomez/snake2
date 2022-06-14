@@ -59,23 +59,24 @@ public class ActionManager {
     }
 
     private int getNextAction() {
-        BodyPart head = mSnake.get(0);
+        BodyPart head = head();
         printLog(head);
-        int action = -1;
+        int action;
         if (head.x == foodX) {
-            action = sameHorizontalLine(head);
+            action = sameHorizontalLine();
         } else if (head.y == foodY) {
-            action = sameVerticalLine(head);
+            action = sameVerticalLine();
         } else if (head.x > foodX) {
-            action = headBelowFood(head);
+            action = headBelowFood();
         } else {
-            action = headAboveFood(head);
+            action = headAboveFood();
         }
         return action;
     }
 
     // head.x < foodX
-    private int headAboveFood(BodyPart head) {
+    private int headAboveFood() {
+        BodyPart head = head();
         int action = -1;
         // head is above food
         if (head.y < foodY) {
@@ -97,12 +98,17 @@ public class ActionManager {
         return action;
     }
 
+    private BodyPart head() {
+        return mSnake.get(0);
+    }
+
     private BodyPart neck() {
         return mSnake.get(1);
     }
 
     // head.x > foodX
-    private int headBelowFood(BodyPart head) {
+    private int headBelowFood() {
+        BodyPart head = head();
         int action = -1;
         // head is below food
         if (head.y < foodY) {
@@ -146,7 +152,8 @@ public class ActionManager {
     }
 
     // head.y == foodY
-    private int sameVerticalLine(BodyPart head) {
+    private int sameVerticalLine() {
+        BodyPart head = head();
         int action = -1;
         // same vertical line
         if (head.x - 1 == foodX) {
@@ -186,8 +193,9 @@ public class ActionManager {
     }
 
     // head.x == foodX
-    private int sameHorizontalLine(BodyPart head) {
+    private int sameHorizontalLine() {
         int action = -1;
+        BodyPart head = head();
         // same horizontal line
         if (head.y - 1 == foodY) {
             // eat left
