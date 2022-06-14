@@ -11,6 +11,8 @@ public class ActionManager {
     private OutputManager mOutputManager;
     private List<BodyPart> mSnake;
     private final long ANIMATION_DELAY = 500;
+    private boolean isInfinite = true;
+    private final int LOOP_COUNT = 10;
 
     public @interface Action {
         int GO_LEFT = 0;
@@ -44,8 +46,8 @@ public class ActionManager {
 
     public void startAction() {
         initFood();
-        int count = 20;
-        while (count-- > 0) {
+        int count = LOOP_COUNT;
+        while (isInfinite || count-- > 0) {
             int direction = getNextAction();
             action(direction);
         }
@@ -74,7 +76,7 @@ public class ActionManager {
         // head is above food
         if (head.y < foodY) {
             // head is top left of food. go right
-            if (neck().x == head.x) {
+            if (neck().x == head.x && neck().y > head.y) {
                 action = Action.GO_DOWN;
             } else {
                 action = Action.GO_RIGHT;
@@ -82,7 +84,7 @@ public class ActionManager {
         } else if (head.y > foodY) {
             // head is ahead of food. go left
             BodyPart neck = neck();
-            if (neck.x == head.x) {
+            if (neck.x == head.x && neck().y < head.y) {
                 action = Action.GO_DOWN;
             } else {
                 action = Action.GO_LEFT;
@@ -109,7 +111,7 @@ public class ActionManager {
             if (head.y == 0) {
                 action = Action.GO_UP;
             } else {
-                if (neck().x == head.x) {
+                if (neck().x == head.x && neck().y > head.y) {
                     action = Action.GO_UP;
                 } else {
                     action = Action.GO_RIGHT;
@@ -121,7 +123,7 @@ public class ActionManager {
                 if (head.y == Const.GRID_SIZE - 1) {
                     // head is at below right corner.
                     BodyPart neck = neck();
-                    if (neck.x == head.x) {
+                    if (neck.x == head.x && neck.y < head.y) {
                         action = Action.GO_UP;
                     } else {
                         action = Action.GO_LEFT;
@@ -131,7 +133,7 @@ public class ActionManager {
                 }
             } else {
                 BodyPart neck = neck();
-                if (neck.x == head.x) {
+                if (neck.x == head.x && neck.y < head.y) {
                     action = Action.GO_UP;
                 } else {
                     action = Action.GO_LEFT;
